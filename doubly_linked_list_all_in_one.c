@@ -9,12 +9,19 @@ typedef struct node
     struct node *next;
 }node;
 
-node *create(node *h);
+node *create(node *);
+void display(node *);
+node *ins_beg(node *);
+node *ins_empty(node *);
+node *ins_end(node *);
+node *ins_after(node *);
+node *ins_before(node *);
+node *ins_pos(node *);
 
 int main()
 {
-node *h;
-int op,op1;
+node *h=NULL;
+int op,op1,op2;
 while(1)
 {
     printf("\n\nselect the required option");
@@ -31,9 +38,57 @@ while(1)
             break;
 
         case 2:
+            display(h);
             break;
 
         case 3:
+            printf("\nselect:");
+            printf("\n1.insert at the beginning");
+            printf("\n2.insert in an empty list");
+            printf("\n3.insert at the end");
+            printf("\n4.insert after/before an element");
+            printf("\n5.insert according to position");
+            scanf("%d",&op1);
+            switch(op1)
+            {
+                case 1:
+                    h=ins_beg(h);
+                    break;
+
+                case 2:
+                    h=ins_empty(h);
+                    break;
+
+                case 3:
+                    h=ins_end(h);
+                    break;
+
+                case 4:
+                    printf("\nselect:");
+                    printf("\n1.insert after an element");
+                    printf("\n2.insert before an element");
+                    scanf("%d",&op2);
+                    switch(op2)
+                    {
+                        case 1:
+                            h=ins_after(h);
+                            break;
+
+                        case 2:
+                            h=ins_before(h);
+                            break;
+
+                        default:
+                            printf("\ninvalid option");
+                    }
+                    break;
+
+                case 5:
+                    break;
+
+                default:
+                    printf("\ninvalid option");
+            }
             break;
 
         case 4:
@@ -47,4 +102,160 @@ while(1)
     }
 }
 }
+
+node *create(node *h)
+{
+    node *t,*p;
+    char ch;
+    t=(node *)malloc(sizeof(node));
+    printf("\nenter data");
+    scanf("%d",&t->data);
+    t->prev=NULL;
+    t->next=NULL;
+    h=t;
+    p=h;
+    printf("\nenter more(y)??");
+    ch=getche();
+    while(ch=='y' || ch=='Y')
+    {
+        t=(node *)malloc(sizeof(node));
+        printf("\nenter data");
+        scanf("%d",&t->data);
+        t->prev=p;
+        t->next=NULL;
+        p->next=t;
+        p=t;
+        printf("\nenter more(y)??");
+        ch=getche();
+    }
+    return h;
+}
+
+void display(node *h)
+{
+    node *p;
+    p=h;
+    printf("\nlist: ");
+    while(p!=NULL)
+    {
+        printf("%2d ",p->data);
+        p=p->next;
+    }
+}
+
+node *ins_beg(node *h)
+{
+    node *t;
+    t=(node *)malloc(sizeof(node));
+    printf("\nenter data=");
+    scanf("%d",&t->data);
+    t->prev=NULL;
+    t->next=h;
+    h->prev=t;
+    h=t;
+    return h;
+}
+
+node *ins_empty(node *h)
+{
+    if(h==NULL)
+    {
+        node *t;
+        t=(node *)malloc(sizeof(node));
+        printf("\nenter data=");
+        scanf("%d",&t->data);
+        t->prev=NULL;
+        t->next=NULL;
+        h=t;
+    }
+    else if(h!=NULL)
+    {
+        printf("\nlist must be empty to insert in an empty list");
+    }
+    return h;
+}
+
+node *ins_end(node *h)
+{
+    node *t,*p;
+    p=h;
+    while(p->next!=NULL)
+    {
+        p=p->next;
+    }
+    t=(node *)malloc(sizeof(node));
+    printf("\nenter data");
+    scanf("%d",&t->data);
+    t->next=NULL;
+    t->prev=p;
+    p->next=t;
+    return h;
+}
+
+node *ins_after(node *h)
+{
+    node *t,*p;
+    int item;
+    printf("\nenter item after which to enter data=");
+    scanf("%d",&item);
+    p=h;
+    while(p!=NULL)
+    {
+        if(p->data==item)
+        {
+            t=(node *)malloc(sizeof(node));
+            printf("\nenter data=");
+            scanf("%d",&t->data);
+            t->prev=p;
+            if(p->next!=NULL)
+            {
+                t->next=p->next;
+                p->next->prev=t;
+            }
+            p->next=t;
+            return h;
+        }
+        p=p->next;
+    }
+    printf("\nelement after which to insert not found!!");
+    return h;
+}
+
+node *ins_before(node *h)
+{
+    node *p,*t;
+    int item;
+    printf("\nenter item before which to enter data=");
+    scanf("%d",&item);
+    if(h->data==item)
+    {
+        t=(node *)malloc(sizeof(node));
+        printf("\nenter data");
+        scanf("%d",&t->data);
+        t->prev=NULL;
+        t->next=h;
+        h->prev=t;
+        h=t;
+        return h;
+    }
+    p=h;
+    while(p!=NULL)
+    {
+        if(p->data==item)
+        {
+            t=(node *)malloc(sizeof(node));
+            printf("\nenter data");
+            scanf("%d",&t->data);
+            t->prev=p->prev;
+            t->next=p;
+            p->prev->next=t;
+            p->prev=t;
+            return h;
+        }
+        p=p->next;
+    }
+    printf("\nelement before which to insert not found!!");
+    return h;
+}
+
 
