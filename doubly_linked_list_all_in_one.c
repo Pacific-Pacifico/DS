@@ -11,12 +11,20 @@ typedef struct node
 
 node *create(node *);
 void display(node *);
+
 node *ins_beg(node *);
 node *ins_empty(node *);
 node *ins_end(node *);
 node *ins_after(node *);
 node *ins_before(node *);
 node *ins_pos(node *);
+
+node *del_beg(node *);
+node *del_empty(node *);
+node *del_only(node *);
+node *del_end(node *);
+node *del_between(node *);
+node *del_pos(node *);
 
 int main()
 {
@@ -92,6 +100,37 @@ while(1)
             break;
 
         case 4:
+            printf("\nselect:");
+            printf("\n1.delete at the beginning");
+            printf("\n2.delete only single node present in the list");
+            printf("\n3.delete at the end");
+            printf("\n4.delete an element in between the list");
+            printf("\n5.delete according to position");
+            scanf("%d",&op1);
+            switch(op1)
+            {
+                case 1:
+                    h=del_beg(h);
+                    break;
+
+                case 2:
+                    h=del_only(h);
+                    break;
+
+                case 3:
+                    h=del_end(h);
+                    break;
+
+                case 4:
+                    h=del_between(h);
+                    break;
+
+                case 5:
+                    break;
+
+                default:
+                    printf("\ninvalid option");
+            }
             break;
 
         case 5:
@@ -258,4 +297,59 @@ node *ins_before(node *h)
     return h;
 }
 
+node *del_beg(node *h)
+{
+    node *t;
+    t=h;
+    h->next->prev=NULL;
+    h=h->next;
+    free(t);
+    return h;
+}
+
+node *del_only(node *h)
+{
+    node *t;
+    t=h;
+    h=NULL;
+    free(t);
+    return h;
+}
+
+node *del_end(node *h)
+{
+    node *t,*p;
+    p=h;
+    while(p->next!=NULL)
+    {
+        p=p->next;
+    }
+    t=p;
+    p->prev->next=NULL;
+    free(t);
+    return h;
+}
+
+node *del_between(node *h)
+{
+    node *t,*p;
+    int item;
+    p=h;
+    printf("\nenter element to delete");
+    scanf("%d",&item);
+    while(p!=NULL)
+    {
+        if(p->data==item)
+        {
+            t=p;
+            p->next->prev=p->prev;
+            p->prev->next=p->next;
+            free(t);
+            return h;
+        }
+        p=p->next;
+    }
+    printf("\nelement to be deleted not found");
+    return h;
+}
 

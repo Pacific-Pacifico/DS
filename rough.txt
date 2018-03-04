@@ -1,0 +1,64 @@
+struct node *ins_after(struct node *start)
+{
+    struct node *temp;
+    int elem;
+    temp=(struct node *)malloc(sizeof(struct node));
+    printf("\nenter element after which enter data=");
+    scanf("%d",&elem);
+
+    printf("\nenter element to insert=");
+    scanf("%d",&temp->data);
+
+    return start;
+}
+
+struct node *create(struct node *start)
+{
+    struct node *temp,*p;
+    char ch;
+    temp=(struct node *)malloc(sizeof(struct node));
+    printf("\nenter data:");
+    scanf("%d",&temp->data);
+    temp->next=NULL;
+    start=temp;
+    p=start;
+    printf("\nadd more??");
+    ch=getche();
+    while(ch=='Y' || ch=='y')
+    {
+        temp=(struct node *)malloc(sizeof(struct node));
+        printf("\nenter data:");
+        scanf("%d",&temp->data);
+        temp->next=NULL;
+        p->next=temp;
+        p=p->next;
+        printf("\nadd more??");
+        ch=getche();
+    }
+    return start;
+}
+struct node *ins_posa(struct node *start)
+{
+    struct node *temp,*p;
+    int pos,c=0;
+    p=start;
+    printf("\nenter position=");
+    scanf("%d",&pos);
+    while(p!=NULL)
+    {
+        c++;
+        if(c==pos)
+        {
+            temp=(struct node *)malloc(sizeof(struct node));
+            printf("\nenter element to insert=");
+            scanf("%d",&temp->data);
+            temp->next=p->next;
+            p->next=temp;
+            return start;
+        }
+        p=p->next;
+    }
+    if(p==NULL)
+        printf("\nposition not found");
+    return start;
+}
